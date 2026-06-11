@@ -50,46 +50,65 @@ const telemetryChart = new Chart(ctx, {
     }
 });
 
-// ─── UPDATE CHART WITH NEW DATA ───
+// ─── UPDATE CHART ───
 function updateChartInstance(newData) {
-    // Get current time as label
     const now = new Date().toLocaleTimeString();
     chartLabels.push(now);
     moistureData.push(newData.moisture);
     temperatureData.push(newData.temperature);
     phData.push(newData.pH);
 
-    // Keep only last 10 readings on chart
     if (chartLabels.length > 10) {
         chartLabels.shift();
         moistureData.shift();
         temperatureData.shift();
         phData.shift();
     }
-
-    // Refresh the chart display
     telemetryChart.update();
 }
 
-// ─── FETCH LIVE DATA ───
+// ─── FETCH LIVE DATA WITH SPEED TRACKING ───
 function fetchLiveMetrics() {
+    const startTime = Date.now();
+
     fetch('https://farmsense-backend.com/get_sensor_data')
         .then(response => response.json())
         .then(data => {
             hideNetworkAlert();
+
+            // Calculate network speed
+            const responseTime = Date.now() - startTime;
+            trackNetworkSpeed(responseTime);
+
             updateDashboard(data);
             updateChartInstance(data);
+
+            // Parse complex payload fields
+            document.getElementById('ph-reading').innerText = data.pH || '--';
+            document.getElementById('humidity-reading').innerText = data.humidity || '--';
         })
         .catch(error => showNetworkAlert("Offline - Reconnecting..."));
 
     // Fetch AI prediction
     fetch('https://farmsense-backend.com/predict_irrigation')
         .then(response => response.json())
-        .then(data => showAIAdvice(data))
+        .then(data => {
+            showAIAdvice(data);
+
+            // Parse complex prediction payload
+            if (data.ai_advisory) {
+                document.getElementById('ai-advisory-text').innerText = data.ai_advisory;
+            }
+            if (data.confidence_score !== undefined) {
+                const pct = (data.confidence_score * 100).toFixed(1);
+                document.getElementById('confidence-badge').innerText = pct + '%';
+                document.getElementById('confidence-score-display').innerText = pct + '%';
+            }
+        })
         .catch(error => console.log("AI not reachable yet"));
 }
 
-// ─── UPDATE SENSOR VALUES ON SCREEN ───
+// ─── UPDATE SENSOR VALUES ───
 function updateDashboard(data) {
     document.getElementById('soil-moisture').innerText = data.moisture;
     document.getElementById('air-temp').innerText = data.temperature;
@@ -104,15 +123,27 @@ function checkMoistureAlert(moisture) {
     if (moisture < 20) {
         alertBox.innerText = "🚨 CRITICAL: Activate Irrigation Systems Immediately!";
         alertBox.className = "alert-red";
-        updateAdvisoryCard("critical");
+        updateAdvisoryUrgency("high");
     } else {
         alertBox.innerText = "✅ Soil Moisture Levels are Stable";
         alertBox.className = "alert-green";
-        updateAdvisoryCard("stable");
+        updateAdvisoryUrgency("healthy");
     }
 }
 
-// ─── AI ADVISORY CARD ───
+// ─── UPDATE ADVISORY URGENCY BADGE ───
+function updateAdvisoryUrgency(level) {
+    const badge = document.getElementById('advisory-urgency-badge');
+    if (level === "high") {
+        badge.innerText = "🔴 High Priority - Immediate Action Required";
+        badge.className = "urgency-high";
+    } else {
+        badge.innerText = "🟢 Healthy Status - Crops Are Fine";
+        badge.className = "urgency-healthy";
+    }
+}
+
+// ─── AI ADVICE ───
 function showAIAdvice(data) {
     const box = document.getElementById('ai-recommendation');
     if (data.irrigation_required === 1) {
@@ -126,20 +157,19 @@ function showAIAdvice(data) {
     }
 }
 
-// ─── UPDATE AI ADVISORY PLACEHOLDER ───
-function updateAdvisoryCard(status) {
-    const ring = document.querySelector('.advisory-ring');
-    const message = document.getElementById('advisory-message');
-    if (status === "critical") {
-        ring.className = "advisory-ring ring-critical";
-        message.innerText = "🚨 Critical: Immediate irrigation required!";
+// ─── NETWORK SPEED TRACKER ───
+function trackNetworkSpeed(responseTime) {
+    const speedDisplay = document.getElementById('network-speed');
+    speedDisplay.innerText = responseTime + 'ms';
+    if (responseTime > 3000) {
+        speedDisplay.className = "speed-slow";
+        document.getElementById('network-speed').title = "⚠️ Slow connection detected";
     } else {
-        ring.className = "advisory-ring ring-stable";
-        message.innerText = "✅ Crops are healthy. No action needed.";
+        speedDisplay.className = "speed-normal";
     }
 }
 
-// ─── NETWORK ALERTS ───
+// ─── NETWORK BANNER ───
 function showNetworkAlert(message) {
     const banner = document.getElementById('network-banner');
     const status = document.getElementById('system-status');

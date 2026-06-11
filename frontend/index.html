@@ -15,14 +15,47 @@
     <span id="system-status">Offline - Reconnecting...</span>
 </div>
 
-    <div class="card">
-        <h3>Soil Health Metrics</h3>
-         <p>Moisture Content: <span id="soil-moisture">--</span>%</p>
-<p>Temperature: <span id="air-temp">--</span>°C</p>
-<p>Humidity: <span id="humidity">--</span>%</p>
-<p>pH Level: <span id="ph-level">--</span></p>
+     <!-- Soil Health Card -->
+<div class="card">
+    <h3>🌱 Soil Health Metrics</h3>
+    <div class="metric-row">
+        <span class="metric-label">Moisture Content</span>
+        <span class="metric-value"><span id="soil-moisture">--</span>%</span>
     </div>
+    <div class="metric-row">
+        <span class="metric-label">Temperature</span>
+        <span class="metric-value"><span id="air-temp">--</span>°C</span>
+    </div>
+    <div class="metric-row">
+        <span class="metric-label">Humidity</span>
+        <span class="metric-value"><span id="humidity">--</span>%</span>
+    </div>
+    <div class="metric-row">
+        <span class="metric-label">pH Level</span>
+        <span class="metric-value"><span id="ph-level">--</span></span>
+    </div>
+</div>
 
+<!-- Extra Metrics Card -->
+<div class="card">
+    <h3>📊 Live Field Readings</h3>
+    <div class="metric-row">
+        <span class="metric-label">pH Reading</span>
+        <span class="metric-value"><div id="ph-reading">--</div></span>
+    </div>
+    <div class="metric-row">
+        <span class="metric-label">Humidity Reading</span>
+        <span class="metric-value"><div id="humidity-reading">--</div></span>
+    </div>
+    <div class="metric-row">
+        <span class="metric-label">Confidence Score</span>
+        <span class="metric-value"><div id="confidence-badge">--%</div></span>
+    </div>
+    <div class="metric-row">
+        <span class="metric-label">Network Speed</span>
+        <span class="metric-value"><div id="network-speed">--ms</div></span>
+    </div>
+</div>
     <div class="card">
         <h3>System Advisory Alerts</h3>
         <p>Status: <span>Waiting for data...</span></p>
@@ -42,15 +75,23 @@
     <canvas id="telemetryChart"></canvas>
 </div>
 
-<!-- AI Advisory Placeholder Card -->
+ <!-- AI Advisory Panel -->
 <div class="card" id="ai-advisory-card">
-    <h3>🤖 AI Crop Advisory</h3>
-    <div id="ai-advisory-content">
-        <div class="advisory-ring">
-            <p id="advisory-message">Waiting for AI insights...</p>
+    <h3>🤖 AI Crop Advisory Panel</h3>
+    <div id="advisory-panel">
+        <div id="advisory-status-bar">
+            <span id="advisory-urgency-badge">Checking...</span>
+        </div>
+        <div id="ai-advisory-text-box">
+            <p id="ai-advisory-text">Waiting for AI recommendations...</p>
+        </div>
+        <div id="confidence-row">
+            <span>Confidence Score:</span>
+            <span id="confidence-score-display">--%</span>
         </div>
     </div>
 </div>
+ 
 
 
 
