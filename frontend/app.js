@@ -87,7 +87,7 @@ function fetchLiveMetrics() {
             document.getElementById('ph-reading').innerText = data.pH || '--';
             document.getElementById('humidity-reading').innerText = data.humidity || '--';
         })
-        .catch(error => showNetworkAlert("Offline - Reconnecting..."));
+        .catch(error => handleNetworkTimeout());
 
      // Fetch AI prediction
     fetch('https://farmsense-backend.com/predict_irrigation')
@@ -103,7 +103,7 @@ function fetchLiveMetrics() {
                 document.getElementById('confidence-score-display').innerText = pct + '%';
             }
         })
-        .catch(error => console.log("AI not reachable yet"));
+         .catch(error => handleNetworkTimeout());
     }
 // ─── UPDATE SENSOR VALUES ───
 function updateDashboard(data) {
@@ -185,7 +185,7 @@ function checkDiseaseWarning(data) {
         statusLight.style.backgroundColor = '#2ecc71'; // green safe
     }
 }
-// ─── NETWORK SPEED TRACKER ───
+ // ─── NETWORK SPEED TRACKER ───
 function trackNetworkSpeed(responseTime) {
     const speedDisplay = document.getElementById('network-speed');
     speedDisplay.innerText = responseTime + 'ms';
@@ -195,20 +195,41 @@ function trackNetworkSpeed(responseTime) {
     } else {
         speedDisplay.className = "speed-normal";
     }
+    adjustPollingSpeed(responseTime);
 }
-
-// ─── NETWORK BANNER ───
+ 
+ // ─── NETWORK BANNER / ERROR HANDLING ───
 function showNetworkAlert(message) {
     const banner = document.getElementById('network-banner');
     const status = document.getElementById('system-status');
     banner.style.display = 'block';
-    status.innerText = message;
+    status.innerText = message || "Offline - Reconnecting to FarmSense Network...";
 }
 
 function hideNetworkAlert() {
     document.getElementById('network-banner').style.display = 'none';
 }
 
-// ─── AUTO REFRESH EVERY 3 SECONDS ───
-setInterval(fetchLiveMetrics, 3000);
+// ─── TIMEOUT HANDLER ───
+function handleNetworkTimeout() {
+    showNetworkAlert("Offline - Reconnecting to FarmSense Network...");
+}
+
+// ─── AUTO REFRESH EVERY 3 SECONDS ───//  
+// // ─── ADAPTIVE POLLING FOR SLOW NETWORKS ───
+let pollInterval = 3000;
+let pollTimer = setInterval(fetchLiveMetrics, pollInterval);
+
+function adjustPollingSpeed(responseTime) {
+    // If network is slow, poll less frequently to save data
+    if (responseTime > 3000 && pollInterval !== 6000) {
+        clearInterval(pollTimer);
+        pollInterval = 6000;
+        pollTimer = setInterval(fetchLiveMetrics, pollInterval);
+    } else if (responseTime <= 3000 && pollInterval !== 3000) {
+        clearInterval(pollTimer);
+        pollInterval = 3000;
+        pollTimer = setInterval(fetchLiveMetrics, pollInterval);
+    }
+}
 fetchLiveMetrics();
