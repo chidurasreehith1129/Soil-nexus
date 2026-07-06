@@ -152,7 +152,7 @@ Cloud-based architecture enables seamless multi-farm deployment with minimal add
 |---|---|---|---|
 | V. Amrutha Sai | N25H01A0206 | CSE - Core | Core |
 | M. Hasini | N25H01A0133 | CSE - Core | Core |
-| Ch. Sreehith | N25H01A0552 | CSE - DS | Core |
+| C. Sreehith | N25H01A0552 | CSE - DS | Core |
 | N. Sai Charan Tej | N25H01A0157 | CSE - Core | Core |
 | N. Sravan Kumar Reddy | N25H01A0660 | CSE - Core | Core |
 
