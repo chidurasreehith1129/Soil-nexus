@@ -2,45 +2,42 @@ name: Automated Linting
 
 on:
   push:
+    branches:
+      - "**"
 
 jobs:
-  backend-lint:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set Up Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
-      - name: Install Flake8
+      - name: Install Python Dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install flake8
 
-      - name: Run Flake8
+      - name: Run flake8 on Backend
         run: |
-          flake8 .
+          flake8 backend
 
-  frontend-lint:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set Up Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: "20"
 
-      - name: Install Dependencies
+      - name: Install Frontend Dependencies
+        working-directory: frontend
         run: |
           npm install
 
-      - name: Run ESLint
+      - name: Run Frontend Linter
+        working-directory: frontend
         run: |
-          npx eslint .
-        
+          npm run lint
