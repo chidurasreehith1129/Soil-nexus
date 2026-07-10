@@ -52,7 +52,7 @@ jobs:
 
       - name: Install Frontend Packages
         working-directory: frontend
-        run: npm ci
+        run: npm install
 
       - name: Lint Frontend
         working-directory: frontend
