@@ -1,161 +1,101 @@
-# 🌱 FarmSense AI — Personalized Crop Advisory System
+# FarmSense AI
 
-> An IoT + AI-based smart farming solution that delivers real-time, personalized crop recommendations to small and medium-scale farmers.
+FarmSense AI is an agricultural decision-support project that combines a Flask backend, Firebase-backed IoT data, and a machine-learning crop recommendation engine for smart farming scenarios.
 
-**Team:** Soil Nexus | **Problem:** MC-10 | **Event:** Makers Conclave 2026  
-**Team ID:** N25H01A0206 | **College:** CDU | **Submission:** 02-03-2026
+## Project Overview
 
----
+This project includes:
+- A Flask backend for crop recommendations and API endpoints
+- Firebase Realtime Database integration for live sensor and hardware data
+- A simple frontend dashboard for field telemetry
+- A machine-learning pipeline for market-price prediction and crop recommendations
 
-## 📌 Table of Contents
+## Project Structure
 
-- [Overview](#overview)
-- [Problem Statement](#problem-statement)
-- [Solution](#solution)
-- [System Architecture](#system-architecture)
-- [Hardware Components](#hardware-components)
-- [Software Stack](#software-stack)
-- [Features](#features)
-- [Project Timeline](#project-timeline)
-- [Impact & Scalability](#impact--scalability)
-- [Team](#team)
+- [Agri_hub.py](Agri_hub.py) - Main Flask backend for recommendation logic
+- [app.py](app.py) - Alternate Flask backend entrypoint
+- [index.html](index.html) - Simple frontend dashboard UI
+- [train_market_model.py](train_market_model.py) - Trains the market prediction model
+- [train_model.py](train_model.py) - Additional training script for irrigation-related modeling
+- [clean_data.py](clean_data.py) - Data cleaning and dataset generation helper
+- [evaluate_market_model.py](evaluate_market_model.py) - Model evaluation script
+- [verify_pipeline.py](verify_pipeline.py) - Firebase and dataset verification script
+- [requirements.txt](requirements.txt) - Python dependencies
 
----
+## Prerequisites
 
-## Overview
+- Python 3.10+
+- A virtual environment
+- Firebase service account credentials JSON file
+- Access to the Firebase Realtime Database
 
-FarmSense AI is a low-cost, IoT-powered advisory platform that collects real-time soil and environmental data and uses machine learning models to provide actionable crop management recommendations — all accessible via a mobile/web dashboard with SMS alerts.
+## Setup
 
-**Key Metrics:**
-- `>85%` Irrigation Prediction Accuracy
-- `<3s` Advisory Response Time
-- `< ₹3,750` Total Prototype Cost
+1. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   .\venv\Scripts\activate
+   ```
 
----
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Problem Statement
+3. Place your Firebase service account JSON file in the project root and ensure the filename matches the configuration used in the backend scripts.
 
-Small and medium farmers in India often rely on generic advice or local guesswork for irrigation, fertilizer use, and disease control. Without real-time monitoring tools:
+4. Run the backend:
+   ```bash
+   python Agri_hub.py
+   ```
 
-- Crop yields remain suboptimal
-- Water is overused or mismanaged
-- Disease outbreaks go undetected until too late
-- Farmers face avoidable financial losses
+5. Open the dashboard in a browser:
+   - Open [index.html](index.html) directly or serve the project through a local static server.
 
----
+## API Endpoint
 
-## Solution
+### POST /recommend_crop
+Sends crop recommendation data based on location and live field conditions.
 
-FarmSense AI addresses these gaps by combining IoT sensor data with AI-driven analysis:
-
-- Collects real-time **soil moisture, temperature, humidity, and pH** data
-- Uses **ML models** to analyze crop health and environmental patterns
-- Delivers **personalized recommendations** via a dashboard and SMS alerts
-- Suggests optimal **irrigation timing, fertilizer usage, and disease alerts**
-
----
-
-## System Architecture
-
-```
-Soil & Weather Sensors          ESP32 Microcontroller         Cloud / Edge Processing        Farmer Interface
-──────────────────────         ─────────────────────         ───────────────────────        ─────────────────
-Moisture | Temp | Humidity  →  Data Aggregation & WiFi   →   AWS / Firebase + AI Model  →  Dashboard + SMS Alerts
-pH Sensor
-```
-
----
-
-## Hardware Components
-
-| Component | Purpose | Cost (₹) |
-|---|---|---|
-| ESP32 Dev Board | Microcontroller + WiFi connectivity | ₹650 |
-| Capacitive Soil Moisture Sensor | Measure soil moisture levels | ₹250 |
-| DHT22 Sensor | Temperature & Humidity readings | ₹400 |
-| pH Sensor (Analog) | Soil acidity detection | ₹1,800 |
-| 5V Power Module | Power supply | ₹300 |
-| Jumper Wires & Breadboard | Prototyping | ₹350 |
-| Cloud Hosting (AWS Free Tier) | AI Model Hosting | ₹0 |
-| **Total Estimated Cost** | | **₹3,750** |
-
----
-
-## Software Stack
-
-| Layer | Technology |
-|---|---|
-| Backend & Data Processing | Python |
-| Machine Learning | TensorFlow / Scikit-learn |
-| Cloud Infrastructure | Firebase / AWS |
-| Training Data | ICAR / Kaggle Crop Datasets (Open-source) |
-
----
-
-## Features
-
-- **Real-time Monitoring** — Live soil and environmental data from ESP32-connected sensors
-- **AI-Powered Recommendations** — Personalized irrigation, fertilizer, and disease advice
-- **Low-Cost Hardware** — Full prototype under ₹3,750, designed for rural affordability
-- **Rural-Ready** — Optimized for low-bandwidth internet conditions
-- **SMS + Dashboard Alerts** — Farmer notifications via mobile web and text
-- **Scalable Architecture** — Cloud-based design supports multi-farm deployment
-
----
-
-## Project Timeline
-
-**60-Day Phased Roadmap**
-
-| Phase | Weeks | Activities | Milestone |
-|---|---|---|---|
-| 1 — Research & Setup | Week 1–2 | Finalize crop use case (Tomato/Paddy), purchase components, set up ESP32, collect sample soil data | Sensors transmitting data to cloud |
-| 2 — Hardware Integration | Week 3–4 | Assemble circuit, calibrate sensors, validate readings, test data transmission stability | Stable real-time data collection |
-| 3 — AI Model Development | Week 5–7 | Data preprocessing, feature engineering, train irrigation prediction model, optimize parameters | AI model with >80% validation accuracy |
-| 4 — Deployment & Testing | Week 8–9 | Integrate AI with dashboard & alerts, field testing, final demo preparation & documentation | Working prototype demo |
-
-**Risk & Contingency**
-
-> **Risk:** Inaccurate sensor readings due to soil variability  
-> **Mitigation:** Sensor calibration with multiple soil samples + averaging algorithm
-
----
-
-## Impact & Scalability
-
-**Target Users:** Small & medium-scale farmers in Telangana  
-**Potential Reach:** 3,000+ farmers in irrigation-dependent regions
-
-**Projected Benefits:**
-- 20–30% optimized water usage
-- Reduced fertilizer costs
-- Early disease warnings
-- Increased crop yield
-
-**Scalability Roadmap:**
-
-```
-Phase 1 → Local deployment in 1 village
-Phase 2 → Integration with state agriculture departments
-Phase 3 → SaaS model for agri-cooperatives
+Example payload:
+```json
+{
+  "latitude": 17.0,
+  "longitude": 78.0
+}
 ```
 
-Cloud-based architecture enables seamless multi-farm deployment with minimal additional infrastructure.
+Example response:
+```json
+{
+  "security_status": "IDLE",
+  "current_field_conditions": {
+    "ph": 6.5,
+    "moisture": 50,
+    "temperature": 25.0
+  },
+  "recommendations": []
+}
+```
 
----
+## Firebase Integration
 
-## Team
+The backend reads live field data and security status from Firebase Realtime Database.
 
-**Team Name:** Soil Nexus
+Key expected paths include:
+- `field_sensors/live_data`
+- `security/status`
+- `crop_knowledge_base`
 
-| Name | Roll No. | Branch | Role |
-|---|---|---|---|
-| V. Amrutha Sai | N25H01A0206 | CSE - Core | Core |
-| M. Hasini | N25H01A0133 | CSE - Core | Core |
-| Ch. Sreehith | N25H01A0552 | CSE - DS | Core |
-| N. Sai Charan Tej | N25H01A0157 | CSE - Core | Core |
-| N. Sravan Kumar Reddy | N25H01A0660 | CSE - Core | Core |
+## Model Training
 
----
+To train the market predictor:
+```bash
+python train_market_model.py
+```
 
-*Built for Makers Conclave 2026 · Problem MC-10 · CDU*
+## Notes
+
+- The project is intended for demonstration and prototyping purposes.
+- The recommendation engine and UI should be aligned on the same Firebase node structure for reliable live updates.
+- For production use, consider adding input validation, stronger error handling, and a single canonical backend entrypoint.
