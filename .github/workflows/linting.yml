@@ -23,8 +23,27 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8
 
-      - name: Lint Backend
-        run: flake8 backend
+      - name: Show repo layout
+        run: |
+          echo "Working directory: $(pwd)"
+          echo "--- Top-level files and directories ---"
+          ls -la
+          echo "--- frontend directory (if present) ---"
+          ls -la frontend || true
+          echo "--- backend directory (if present) ---"
+          ls -la backend || true
+          echo "--- directories (depth 2) ---"
+          find . -maxdepth 2 -type d -print
+
+      - name: Lint Backend (if present)
+        run: |
+          if [ -d backend ]; then
+            echo "Found 'backend' directory — running: flake8 backend"
+            flake8 backend
+          else
+            echo "Directory 'backend' not found. Running flake8 on repository root instead."
+            flake8 .
+          fi
 
       - name: Setup Node
         uses: actions/setup-node@v4
