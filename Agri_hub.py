@@ -162,10 +162,22 @@ def get_sensor_payload():
         sensors = get_db_value("sensor_data", {"ph": 6.5, "moisture": 50, "temperature": 25.0, "humidity": 65})
     if not isinstance(sensors, dict):
         sensors = {}
+    
+    # Add dynamic simulation for demo mode (no Firebase)
+    if firebase_app is None and MOCK_SENSORS is None:
+        import random
+        current_time = time.time()
+        # Simulate natural sensor fluctuations
+        sensors["ph"] = max(5.5, min(7.5, sensors.get("ph", 6.5) + random.uniform(-0.1, 0.1)))
+        sensors["moisture"] = max(30, min(80, sensors.get("moisture", 50) + random.uniform(-2, 2)))
+        sensors["temperature"] = max(20, min(35, sensors.get("temperature", 25.0) + random.uniform(-0.5, 0.5)))
+        sensors["humidity"] = max(40, min(85, sensors.get("humidity", 65) + random.uniform(-1, 1)))
+        sensors["timestamp_ms"] = int(current_time * 1000)
 
     current_time = time.time()
     current_time_ms = int(current_time * 1000)
 
+    # pyrefly: ignore [unknown-name]
     global last_hardware_timestamp_ms, last_hardware_receive_time
     if 'last_hardware_timestamp_ms' not in globals():
         last_hardware_timestamp_ms = None
@@ -1147,7 +1159,7 @@ def background_sensor_task():
                 last_log_time = current
         except Exception as e:
             print(f"Watchdog error: {e}")
-        time.sleep(3)
+        time.sleep(1)
 
 threading.Thread(target=background_sensor_task, daemon=True).start()
 
