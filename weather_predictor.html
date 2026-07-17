@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#29594E">
+  <title>FarmSense | Weather Simulator</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=2">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="page-grain"></div>
+  <div class="botanical botanical-one">✦</div>
+  <div class="botanical botanical-two">❋</div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="dashboard.html" aria-label="FarmSense home"><span class="brand-mark">✦</span><span>Farm<span>Sense</span></span></a>
+      <p class="eyebrow nav-label">FIELD OPERATIONS</p>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="dashboard.html">⌂ Home</a>
+        <a href="crop_recommendations.html">♧ Crop recommendations</a>
+        <a href="crop_monitoring.html">◒ Crop Monitoring</a>
+        <a href="price_predictor.html">✦ Price predictor</a>
+        <a class="active" href="weather_predictor.html">☼ Weather predictor</a>
+      </nav>
+      <div class="sidebar-grow"></div>
+      <div class="season-card">
+        <span class="season-icon">⌖</span>
+        <div style="flex:1;">
+          <small>Field Coordinates</small>
+          <div style="display: flex; gap: 5px; margin-top: 4px;">
+            <input type="number" id="coord-lat" value="28.61" step="0.01" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px; border-radius: 4px; font-size: 11px;" placeholder="Lat">
+            <input type="number" id="coord-lon" value="77.20" step="0.01" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px; border-radius: 4px; font-size: 11px;" placeholder="Lon">
+          </div>
+        </div>
+      </div>
+      <a class="profile-link" href="#"><span class="avatar">AR</span><span><strong>Alex Rivera</strong><small>Farm manager</small></span><b>›</b></a>
+    </aside>
+
+    <main class="recommendation-page">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">LIVE CLIMATE DATA</p>
+          <h1>12-Month Climate Forecast</h1>
+        </div>
+        <div class="top-actions">
+          <button id="save-override-btn" class="button-primary" style="margin-right: 10px;">Save Macro-Weather Override</button>
+          <a class="button-secondary" href="dashboard.html">Back home</a>
+        </div>
+      </header>
+
+      <section class="recommendation-page-content" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; align-items: start;">
+        
+        <!-- Interactive Sliders (Replaced by Data Grid) -->
+        <article class="crop-panel" style="padding: 24px;">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">LONG-TERM PROJECTION</p>
+              <h2>12-Month Average Forecast</h2>
+            </div>
+          </div>
+          
+          <div id="climate-grid-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; max-height: 480px; overflow-y: auto; padding-right: 8px;">
+            <!-- Generated dynamically via JS -->
+            <p style="color: #a3c2a1; grid-column: span 2;">Loading climate forecast...</p>
+          </div>
+        </article>
+
+        <!-- Right Side: Chart & Crop Suitability Impact -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          
+          <!-- Daily Forecast Card -->
+          <article class="crop-panel" style="padding: 20px;">
+            <p class="eyebrow">SHORT-TERM FORECAST</p>
+            <h3 style="margin: 4px 0 12px 0; color: white;">7-Day Daily Forecast</h3>
+            
+            <div id="daily-forecast-container" style="display: flex; gap: 10px; overflow-x: auto; padding-bottom: 8px;">
+              <!-- Generated dynamically via JS -->
+              <p style="color: #a3c2a1;">Loading daily forecast...</p>
+            </div>
+          </article>
+
+          <!-- Climate Trend Chart Card -->
+          <article class="crop-panel" style="padding: 20px;">
+            <p class="eyebrow">FORECAST VISUALIZATION</p>
+            <h3 style="margin: 4px 0 12px 0; color: white;">12-Month Trend View</h3>
+            <div style="background: rgba(255,255,255,0.02); border-radius: 12px; padding: 16px; border: 1px solid rgba(255,255,255,0.05);">
+              <canvas id="weatherTrendChart" style="max-height: 220px; width: 100%;"></canvas>
+            </div>
+          </article>
+
+          <!-- Dynamic Recommendations Card -->
+          <article class="crop-panel" style="padding: 20px;">
+            <p class="eyebrow">CLIMATE RECOMMENDATIONS</p>
+            <h3 style="margin: 4px 0 12px 0; color: white;">Forecast-Based Top Crops</h3>
+            
+            <div id="recommendations-container" style="display: flex; flex-direction: column; gap: 10px;">
+              <!-- Generated dynamically via JS -->
+              <p style="color: #a3c2a1;">Adjust weather and save to recalculate recommendations.</p>
+            </div>
+          </article>
+
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <script src="weather_predictor.js"></script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#29594E">
+  <link rel="manifest" href="/manifest.json">
+  <title>FarmSense | Field Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=2">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="page-grain"></div>
+  <div class="botanical botanical-one">✦</div>
+  <div class="botanical botanical-two">❋</div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="FarmSense home"><span class="brand-mark">✦</span><span>Farm<span>Sense</span></span></a>
+      <p class="eyebrow nav-label">FIELD OPERATIONS</p>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a class="active" href="#overview"><span>⌂</span>Overview</a>
+        <a href="#field-health"><span>◌</span>Field health</a>
+        <a href="#trends"><span>⌁</span>Sensor trends</a>
+        <a href="crop_recommendations.html"><span>♧</span>Crop recommendations</a>
+        <a href="crop_monitoring.html"><span>◒</span>Crop Monitoring</a>
+        <div class="nav-group">
+          <button type="button" class="nav-group-toggle button-secondary" aria-expanded="false" aria-controls="predictor-submenu" id="predictor-toggle"><span>✦</span>AI Predictor</button>
+          <div id="predictor-submenu" class="nav-submenu hidden">
+            <a href="#advisory">Field advisories</a>
+            <a href="#disease-analyzer">Disease analyzer</a>
+            <a href="price_predictor.html">Price predictor</a>
+            <a href="weather_predictor.html">Weather predictor</a>
+          </div>
+        </div>
+      </nav>
+      <div class="sidebar-grow"></div>
+      <div class="season-card">
+        <span class="season-icon">⌖</span>
+        <div style="flex:1;">
+          <small>Field Coordinates</small>
+          <div style="display: flex; gap: 5px; margin-top: 4px;">
+            <input type="number" id="coord-lat" value="28.61" step="0.01" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px; border-radius: 4px; font-size: 11px;" placeholder="Lat">
+            <input type="number" id="coord-lon" value="77.20" step="0.01" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px; border-radius: 4px; font-size: 11px;" placeholder="Lon">
+          </div>
+        </div>
+      </div>
+      <a class="profile-link" href="#"><span class="avatar">AR</span><span><strong>Alex Rivera</strong><small>Farm manager</small></span><b>›</b></a>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div><p class="eyebrow">11 JULY 2026 · FIELD 01</p><h1>Good morning, Alex.</h1></div>
+        <div class="top-actions"><button id="sidebar-toggle" class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="true"><span></span><span></span><span></span></button><button id="refresh-hardware-btn" class="button-secondary">Refresh sensors</button><button id="demo-mode-btn" class="button-secondary">Try demo data</button><button class="notification" aria-label="Notifications">♢<i></i></button></div>
+      </header>
+
+      <div id="network-banner" role="status"><span class="status-dot"></span><span id="system-status">Offline - Reconnecting...</span> <span id="last-online-time" style="margin-left: 8px; font-size: 0.9em; opacity: 0.8;"></span></div>
+
+      <section class="hero" id="overview">
+        <div class="hero-copy"><p class="eyebrow">YOUR GROWING SPACE</p><h2>A quieter way to<br><em>grow with confidence.</em></h2><p>Live soil intelligence, shaped into clear decisions for every corner of your field.</p><a class="hero-link" href="#advisory">View field advisory <span>→</span></a></div>
+        <div class="hero-art" aria-hidden="true"><div class="sun"></div><div class="hill hill-back"></div><div class="hill hill-front"></div><span class="plant plant-a">⌇</span><span class="plant plant-b">⌇</span><span class="plant plant-c">⌇</span><div class="field-stamp"><span>◒</span><small>FIELD<br>01</small></div></div>
+      </section>
+
+      <section class="section-heading" id="field-health"><div><p class="eyebrow">LIVE CONDITIONS</p><h2>Field health</h2></div><span class="live-pill"><i id="live-reading-dot"></i> <span id="live-reading-text">Live readings</span></span></section>
+      <section class="metrics-grid">
+        <article class="metric-card"><div class="metric-top"><span class="metric-icon">≈</span><span class="metric-state">Balanced</span></div><p>Soil moisture</p><div class="metric-number"><strong id="soil-moisture">--</strong><span>%</span></div><div class="meter"><i id="moisture-meter" style="width:68%"></i></div><small>Ideal range 45–65%</small></article>
+        <article class="metric-card"><div class="metric-top"><span class="metric-icon">◌</span><span class="metric-state">Optimal</span></div><p>Air temperature</p><div class="metric-number"><strong id="air-temp">--</strong><span>°C</span></div><div class="temperature-scale"><i></i></div><small>Comfort zone 20–30°C</small></article>
+        <article class="metric-card"><div class="metric-top"><span class="metric-icon">◒</span><span class="metric-state">Stable</span></div><p>Humidity</p><div class="metric-number"><strong id="humidity">--</strong><span>%</span></div><div class="meter"><i class="olive" style="width:62%"></i></div><small>Ideal range 55–75%</small></article>
+        <article class="metric-card soil-card"><div class="metric-top"><span class="metric-icon">◈</span><span class="metric-state">Good</span></div><p>Soil pH level</p><div class="metric-number"><strong id="ph-level">--</strong></div><div class="ph-scale"><span>Acidic</span><i></i><span>Alkaline</span></div><small>Balanced for your crop</small></article>
+      </section>
+
+      <section class="content-grid">
+        <article class="chart-panel" id="trends"><div class="panel-header"><div><p class="eyebrow">SENSOR HISTORY</p><h2>Field rhythm</h2></div><div style="display:flex; gap:10px; align-items:center;"><select id="dashboard-soil-selector" class="button-secondary" style="padding:8px 12px; font-size: 14px; border:1px solid rgba(255,255,255,0.2); background: #1a3c34; color:#ffffff; border-radius:6px; outline: none;"><option style="background: #1a3c34; color: #fff;" value="">Select Soil Type</option><option style="background: #1a3c34; color: #fff;" value="Clay">Clay</option><option style="background: #1a3c34; color: #fff;" value="Silt">Silt</option><option style="background: #1a3c34; color: #fff;" value="Sand">Sand</option><option style="background: #1a3c34; color: #fff;" value="Loam">Loam</option></select><button id="submit-soil-btn" class="button-secondary" style="padding:8px 16px; font-size: 14px; background: #2f6853; border-color: #3b7b64; color: white;">Get Recommendations</button><button id="toggle-chart-btn" class="text-button">Hide chart</button></div></div><div class="chart-wrap"><canvas id="telemetryChart"></canvas></div><div class="chart-legend"><span><i class="dot moisture-dot"></i>Moisture</span><span><i class="dot temp-dot"></i>Temperature</span><span><i class="dot ph-dot"></i>pH level</span></div></article>
+        <aside class="advisory-card" id="advisory"><div class="advisory-flower">✽</div><p class="eyebrow">FARMSENSE INTELLIGENCE</p><h2>Today’s field note</h2><div id="advisory-status-bar"><span id="advisory-urgency-badge">Checking field...</span></div><p id="advisory-message-text">Waiting for AI recommendations...</p><div class="advisory-meta"><span>Confidence</span><strong id="confidence-score-display">--%</strong></div><div id="disease-warning-tag" class="hidden">Early disease warning</div><div id="ai-recommendation" class="screen-reader-message">Waiting for AI response...</div></aside>
+      </section>
+
+      <section class="disease-section" id="disease-analyzer">
+        <article class="disease-card">
+          <div class="panel-header"><div><p class="eyebrow">PLANT DISEASE</p><h2>Leaf disease analyzer</h2></div><button id="analyze-btn" class="button-secondary" type="button">Analyze photo</button></div>
+          <div class="disease-content">
+            <div class="upload-column">
+              <label class="upload-plate" for="leaf-upload">
+                <input type="file" id="leaf-upload" accept="image/*" hidden />
+                <span>Upload a leaf image</span>
+                <small>Choose a clear photo of the affected leaf.</small>
+              </label>
+              <div class="image-preview" id="leaf-preview-container">
+                <img id="leaf-preview" src="" alt="Leaf preview" class="hidden" />
+                <span id="leaf-preview-placeholder">No image selected</span>
+              </div>
+            </div>
+            <div class="diagnosis-details">
+              <div class="diagnosis-row"><span>Crop</span><strong id="predicted-crop">—</strong></div>
+              <div class="diagnosis-row"><span>Condition</span><strong id="predicted-condition">—</strong></div>
+              <div class="diagnosis-row"><span>Confidence</span><strong id="prediction-confidence">—</strong></div>
+              <div class="diagnosis-row diagnosis-text"><span>Remedy</span><p id="prediction-remedy">Upload a photo and select Analyze to see the suggested treatment.</p></div>
+              <div class="diagnosis-row diagnosis-text"><span>Precaution</span><p id="prediction-precaution">Follow recommended care steps after diagnosis.</p></div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="recommendations-section" id="crop-recommendations">
+        <article class="crop-panel">
+          <div class="panel-header"><div><p class="eyebrow">FIELD PLANNING</p><h2>Crop recommendations</h2></div><div class="top-actions"><span class="crop-count">Loading recommendations…</span><a class="button-secondary" href="crop_recommendations.html">View all</a><button id="refresh-recommendations" class="button-secondary" type="button">Refresh</button></div></div>
+          <div class="crop-grid">
+            <article class="crop-item"><h3>Loading...</h3><p>Waiting for the ML backend.</p></article>
+          </div>
+        </article>
+        <aside class="field-overview"><div class="panel-header"><div><p class="eyebrow">FIELD SNAPSHOT</p><h2>Field health overview</h2></div><span>Updated now</span></div><div class="health-bars"><div><p><span>Soil balance</span><strong>82%</strong></p><i><b style="width:82%"></b></i></div><div><p><span>Water efficiency</span><strong>74%</strong></p><i><b style="width:74%"></b></i></div><div><p><span>Growth readiness</span><strong>91%</strong></p><i><b style="width:91%"></b></i></div></div><div class="overview-facts"><div><span>Crop cycle</span><strong>12 days</strong></div><div><span>Risk level</span><strong>Low</strong></div></div></aside>
+      </section>
+
+      <section class="detail-grid">
+        <article class="readings-card"><div class="panel-header"><div><p class="eyebrow">SYSTEM PULSE</p><h2>Live field readings</h2></div><span class="status-light" aria-label="System health"></span></div><div class="reading-list"><div><span>pH reading</span><strong id="ph-reading">--</strong></div><div><span>Humidity reading</span><strong id="humidity-reading">--</strong></div><div><span>Model confidence</span><strong id="confidence-badge">--%</strong></div><div><span>Network response</span><strong id="network-speed">--ms</strong></div></div></article>
+        <article class="alert-card" id="alert-card"><p class="eyebrow">FIELD WATCH</p><h2>Moisture check</h2><div id="moisture-alert">Waiting for the first sensor reading...</div><p class="mini-note">Sensor updates are checked automatically to keep your field in balance.</p></article>
+      </section>
+    </main>
+  </div>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script src="app.js?v=2"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          for (let registration of registrations) {
+            registration.unregister().then(() => {
+              console.log('ServiceWorker unregistered successfully');
+            });
+          }
+        }).catch(err => {
+          console.log('ServiceWorker operation failed: ', err);
+        });
+      });
+    }
+  </script>
+  <!-- floating Sandbox panel -->
+  <div id="judge-sandbox" style="display: none; position: fixed; bottom: 20px; left: 20px; z-index: 10000; background: linear-gradient(145deg, #104e3e, #0b3f32); border: 1px solid rgba(248, 235, 214, 0.2); border-radius: 16px; width: 280px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); padding: 16px; transition: transform 0.3s ease; font-family: 'Plus Jakarta Sans', sans-serif;">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 8px; margin-bottom: 12px;">
+      <h3 style="margin: 0; color: #fff; font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">✦ Judge Sandbox</h3>
+      <button id="toggle-sandbox-btn" style="background: none; border: none; color: #a3c2a1; cursor: pointer; font-size: 14px;">−</button>
+    </div>
+    <div id="sandbox-content" style="display: flex; flex-direction: column; gap: 12px;">
+      <div>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #a3c2a1; margin-bottom: 4px;">
+          <span>Soil Moisture</span><strong id="sim-moisture-val">50%</strong>
+        </div>
+        <input type="range" id="sim-moisture" min="0" max="100" value="50" style="width: 100%; accent-color: #34d399;">
+      </div>
+      <div>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #a3c2a1; margin-bottom: 4px;">
+          <span>Soil pH</span><strong id="sim-ph-val">6.5</strong>
+        </div>
+        <input type="range" id="sim-ph" min="0" max="14" step="0.1" value="6.5" style="width: 100%; accent-color: #34d399;">
+      </div>
+      <div>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #a3c2a1; margin-bottom: 4px;">
+          <span>Temperature</span><strong id="sim-temp-val">25°C</strong>
+        </div>
+        <input type="range" id="sim-temp" min="0" max="50" value="25" style="width: 100%; accent-color: #34d399;">
+      </div>
+      <div>
+        <div style="display: flex; justify-content: space-between; font-size: 11px; color: #a3c2a1; margin-bottom: 4px;">
+          <span>Humidity</span><strong id="sim-humidity-val">65%</strong>
+        </div>
+        <input type="range" id="sim-humidity" min="0" max="100" value="65" style="width: 100%; accent-color: #34d399;">
+      </div>
+      <button id="send-sim-btn" style="width: 100%; background: #34d399; color: #104e3e; border: none; font-weight: 700; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-top: 4px;">Inject Telemetry</button>
+    </div>
+  </div>
+
+  <!-- AI Agronomist Chat UI -->
+  <div id="ai-chat-widget" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999; background: #0f172a; border: 1px solid rgba(52, 211, 153, 0.2); border-radius: 16px; width: 320px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6); display: flex; flex-direction: column; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.3s ease;">
+    <!-- Header -->
+    <div id="ai-chat-header" style="background: linear-gradient(135deg, #104e3e, #064e3b); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(52, 211, 153, 0.2);">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 20px;">🤖</span>
+        <span style="color: #fff; font-weight: 700; font-size: 14px;">FarmSense AI</span>
+      </div>
+      <span id="ai-chat-toggle-icon" style="color: #a3c2a1; font-size: 18px; line-height: 1;">▲</span>
+    </div>
+    
+    <!-- Body -->
+    <div id="ai-chat-body" style="display: none; flex-direction: column; height: 350px;">
+      <div id="ai-chat-messages" style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; font-size: 13px; color: #d6e7cf; background: rgba(0,0,0,0.2);">
+        <div style="background: rgba(52, 211, 153, 0.1); padding: 10px; border-radius: 8px 8px 8px 0; border: 1px solid rgba(52, 211, 153, 0.2); align-self: flex-start; max-width: 85%;">
+          Hello! I am your AI Agronomist. How can I help you with your farm today?
+        </div>
+      </div>
+      
+      <!-- Input -->
+      <div style="padding: 12px; border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 8px; background: #0f172a;">
+        <input type="text" id="ai-chat-input" placeholder="Ask about crops, soil..." style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 8px 12px; color: white; font-size: 13px; outline: none;">
+        <button id="ai-chat-send" style="background: #34d399; color: #064e3b; border: none; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px;">➤</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

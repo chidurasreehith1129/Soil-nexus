@@ -1,0 +1,16 @@
+{
+  "name": "FarmSense Field Intelligence",
+  "short_name": "FarmSense",
+  "start_url": "/dashboard.html",
+  "display": "standalone",
+  "background_color": "#0b5645",
+  "theme_color": "#29594e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiB2aWV3Qm94PSIwIDAgMjQgMjQiPjxwYXRoIGZpbGw9IiM4N2E4NmIiIGQ9Ik0xMiAyTDQgNmwyIDEyIDEyLTIgMi0xMnoiLz48L3N2Zz4=",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}

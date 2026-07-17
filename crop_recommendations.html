@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#29594E">
+  <link rel="manifest" href="/manifest.json">
+  <title>FarmSense | Crop Recommendations</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=2">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="page-grain"></div>
+  <div class="botanical botanical-one">✦</div>
+  <div class="botanical botanical-two">❋</div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="dashboard.html" aria-label="FarmSense home"><span class="brand-mark">✦</span><span>Farm<span>Sense</span></span></a>
+      <p class="eyebrow nav-label">FIELD OPERATIONS</p>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="dashboard.html" class="">⌂ Home</a>
+        <a class="active" href="crop_recommendations.html">♧ Crop recommendations</a>
+        <a href="crop_monitoring.html">◒ Crop Monitoring</a>
+        <a href="#">✦ Advisory</a>
+      </nav>
+      <div class="sidebar-grow"></div>
+      <div class="season-card">
+        <span class="season-icon">⌖</span>
+        <div style="flex:1;">
+          <small>Field Coordinates</small>
+          <div style="display: flex; gap: 5px; margin-top: 4px;">
+            <input type="number" id="coord-lat" value="28.61" step="0.01" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px; border-radius: 4px; font-size: 11px;" placeholder="Lat">
+            <input type="number" id="coord-lon" value="77.20" step="0.01" style="width: 100%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 4px; border-radius: 4px; font-size: 11px;" placeholder="Lon">
+          </div>
+        </div>
+      </div>
+      <a class="profile-link" href="#"><span class="avatar">AR</span><span><strong>Alex Rivera</strong><small>Farm manager</small></span><b>›</b></a>
+    </aside>
+    <main class="recommendation-page">
+      <header class="topbar"><div><p class="eyebrow">CROP RECOMMENDATIONS</p><h1>All suggested crops</h1></div><div class="top-actions"><button id="refresh-recommendation-page" class="button-secondary" type="button">Refresh list</button><a class="button-secondary" href="dashboard.html">Back home</a></div></header>
+      <section class="recommendation-page-content">
+        <article class="crop-panel full-width">
+          <div class="panel-header"><div><p class="eyebrow">RECOMMENDED CROPS</p><h2>Best crops for your field</h2></div><span class="crop-count">Loading…</span></div>
+          <div class="crop-grid" id="recommendation-list"></div>
+        </article>
+      </section>
+    </main>
+  </div>
+  <script src="crop_recommendations.js?v=2"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js');
+      });
+    }
+  </script>
+</body>
+</html>
