@@ -1,4 +1,6 @@
 import os
+from dotenv import load_dotenv
+load_dotenv()
 import json
 import io
 import logging
@@ -404,6 +406,78 @@ def predict_disease():
     uploaded = request.files.get("leaf_image")
     if uploaded is None or uploaded.filename == "":
         return jsonify({"error": "No image file uploaded. Please select a leaf photo."}), 400
+
+    plant_id_api_key = os.environ.get("PLANT_ID_API_KEY")
+    if plant_id_api_key and plant_id_api_key != "YOUR_API_KEY_HERE":
+        try:
+            import base64
+            uploaded.stream.seek(0)
+            image_data = uploaded.stream.read()
+            encoded_image = base64.b64encode(image_data).decode("ascii")
+
+            api_url = "https://api.plant.id/v2/health_assessment"
+            payload = {
+                "images": [encoded_image],
+                "modifiers": ["crops_fast", "similar_images"],
+                "disease_details": ["cause", "common_names", "classification", "description", "treatment"]
+            }
+            headers = {
+                "Content-Type": "application/json",
+                "Api-Key": plant_id_api_key
+            }
+
+            response = requests.post(api_url, json=payload, headers=headers)
+            if response.status_code == 200:
+                data = response.json()
+                health_assessment = data.get("health_assessment", {})
+                is_healthy = health_assessment.get("is_healthy", False)
+                diseases = health_assessment.get("diseases", [])
+
+                if is_healthy or not diseases:
+                    return jsonify({
+                        "prediction": "Healthy",
+                        "crop": "Unknown Plant",
+                        "condition": "Healthy",
+                        "confidence": 1.0,
+                        "remedy": "No action needed. Continue regular monitoring.",
+                        "precaution": "Keep leaves dry and avoid overwatering.",
+                        "is_healthy": True
+                    })
+                
+                best_disease = diseases[0]
+                disease_name = best_disease.get("name", "Unknown Disease")
+                disease_prob = best_disease.get("probability", 0.0)
+                
+                treatment = "Maintain good crop care."
+                disease_details = best_disease.get("disease_details", {})
+                if disease_details and "treatment" in disease_details:
+                    treatments = disease_details["treatment"]
+                    treatment_list = []
+                    for cat, items in treatments.items():
+                        if items:
+                            treatment_list.extend(items)
+                    if treatment_list:
+                        treatment = " ".join(treatment_list[:2])
+                
+                return jsonify({
+                    "prediction": disease_name,
+                    "crop": "Detected Plant",
+                    "condition": disease_name,
+                    "confidence": round(disease_prob, 3),
+                    "remedy": treatment,
+                    "precaution": "Monitor plant health and follow standard agricultural practices.",
+                    "is_healthy": False
+                })
+            else:
+                print(f"Plant.id API error: {response.status_code} - {response.text}")
+                # Fallback to local model if API fails
+        except Exception as e:
+            print(f"Plant.id API exception: {e}")
+            # Fallback to local model if exception occurs
+
+    # --- Local Model Fallback ---
+    if disease_model is None or not class_names:
+        return jsonify({"error": "Disease model unavailable on server and Plant.id API key not configured."}), 503
 
     try:
         uploaded.stream.seek(0)

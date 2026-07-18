@@ -5,6 +5,8 @@ __pycache__/
    # Security - never commit these
 *.env
 .env
+.env.local
+.env.*
 serviceAccountKey.json
 *firebase*.json
 venv/

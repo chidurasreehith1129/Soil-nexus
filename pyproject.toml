@@ -1,2 +1,2 @@
 [tool.vercel]
-entrypoint = "Agri_hub:app"
+entrypoint = "Agri_hub.py:app"
